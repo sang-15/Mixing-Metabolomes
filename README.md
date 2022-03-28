@@ -10,5 +10,5 @@ For downloading FASTA from NCBI <br />
 - **[Prokka](https://github.com/tseemann/prokka)** <br />
 For rapid prokaryotic genome annotation <br />
 
--**[SilentGene - prokka2kegg](https://github.com/SilentGene/Bio-py/tree/master/prokka2kegg)** <br />
+- **[SilentGene - prokka2kegg](https://github.com/SilentGene/Bio-py/tree/master/prokka2kegg)** <br />
 For K-id converstion from Prokka's .gbk file  <br />
