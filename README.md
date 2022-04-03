@@ -14,6 +14,32 @@ For rapid prokaryotic genome annotation <br />
 - **[SilentGene - prokka2kegg](https://github.com/SilentGene/Bio-py/tree/master/prokka2kegg)** <br />
 For K-id converstion from Prokka's .gbk file  <br />
 
+## Running wrapper
+### Default setting
+The following code will run the wrapper with default setting by giving GenBank assembly accession (eg. [GCA_002861225.1](https://www.ncbi.nlm.nih.gov/assembly/GCA_002861225.1))
+```
+python3 formatek.py -i GCA_002861225.1
+```
+
+### User specified FASTA
+
+
+
+## Output
+The wrapper will generate a 'Results' folder under '$HOME/' directory, and the folder contains the following: <br />
+
+- (Default) Downloaded assemble genome data from NCBI
+- Prokka output
+- Silent gene output
+- formatek_out.txt <br />
+Final gene list required by KEGG MAPPER
+
+
+## Test data
+- E. coli: [GCA_002861225.1](https://www.ncbi.nlm.nih.gov/assembly/GCA_002861225.1) 
+- L. crispatus: [GCA_002861815.1](https://www.ncbi.nlm.nih.gov/assembly/GCA_002861815.1) 
+- P. mirabilis: [GCA_012030515.1](https://www.ncbi.nlm.nih.gov/assembly/GCA_012030515.1) 
+
 ## [Color cods for KEGG MAPPER](https://www.genome.jp/kegg/kegg1c.html#mapping)
 
 - **Pathway mapping of two organisms (global/overview maps)** <br />
