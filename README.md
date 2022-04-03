@@ -22,8 +22,12 @@ python3 formatek.py -i GCA_002861225.1
 ```
 
 ### User specified FASTA
-
-
+The following code will run the wrapper with user specified FASTA
+```
+python3 formatek.py -i genome.fasta -t species
+```
+- **-i**: the input location of FASTA file
+- **-t**: the taxonomy information of the correspoding FASTA
 
 ## Output
 The wrapper will generate a 'Results' folder under '$HOME/' directory, and the folder contains the following: <br />
