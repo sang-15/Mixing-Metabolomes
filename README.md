@@ -13,3 +13,22 @@ For rapid prokaryotic genome annotation <br />
 
 - **[SilentGene - prokka2kegg](https://github.com/SilentGene/Bio-py/tree/master/prokka2kegg)** <br />
 For K-id converstion from Prokka's .gbk file  <br />
+
+## [Color cods for KEGG MAPPER](https://www.genome.jp/kegg/kegg1c.html#mapping)
+
+- **Pathway mapping of two organisms (global/overview maps)** <br />
+Organism 1	      	![#00cc33](https://via.placeholder.com/15/00cc33/000000?text=+) `#00cc33` <br />
+Organism 2	      	![#ff3366](https://via.placeholder.com/15/ff3366/000000?text=+) `#ff3366`<br />
+Organisms 1 and 2	      	![#3366ff](https://via.placeholder.com/15/3366ff/000000?text=+) `#3366ff`<br />
+
+- **Pathway mapping of multiple organisms (regular maps)** <br />
+Organism 1	      	![#bfffbf](https://via.placeholder.com/15/bfffbf/000000?text=+) `#bfffbf`<br />
+Organism 2	      	![#ffbbcc](https://via.placeholder.com/15/ffbbcc/000000?text=+) `#ffbbcc`<br />
+Organism 3	      	![#bbccff](https://via.placeholder.com/15/bbccff/000000?text=+) `#bbccff`<br />
+Organism 4	      	![#cfffcf](https://via.placeholder.com/15/cfffcf/000000?text=+) `#cfffcf`<br />
+Organism 5	      	![#ffcfef](https://via.placeholder.com/15/ffcfef/000000?text=+) `#ffcfef`<br />
+Organism 6	      	![#cfefff](https://via.placeholder.com/15/cfefff/000000?text=+) `#cfefff`<br />
+Organism 7	      	![#dfefcf](https://via.placeholder.com/15/dfefcf/000000?text=+) `#dfefcf`<br />
+Organism 8	      	![#ffefcc](https://via.placeholder.com/15/ffefcc/000000?text=+) `#ffefcc`<br />
+Organism 9	      	![#dfccff](https://via.placeholder.com/15/dfccff/000000?text=+) `#dfccff`<br />
+Organism 10	      	![#dfdfcc](https://via.placeholder.com/15/dfdfcc/000000?text=+) `#dfdfcc`<br />
