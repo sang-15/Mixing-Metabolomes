@@ -7,13 +7,14 @@
 
 
 
+#Prokka + Silent Gene
+#Use Prokka to annotate inputted genome
+#Use Prokka output in Silent Gene script to get K numbers
 
+#results = output dir, genus = genus name from input, fasta = genome from input (update later)
+os.system('prokka --outdir $HOME/' + results + ' --prefix prokka --genus ' + genus + ' ' + fasta) #Prokka command
 
-
-
-
-
-
+os.system('python3 prokka2kegg.py -i prokka.gbk -d idmapping_KO.tab.gz -o sample.kegg.out.txt') #Silent Gene command
 
 #Aggrgation
 
