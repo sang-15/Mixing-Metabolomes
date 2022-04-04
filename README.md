@@ -4,6 +4,7 @@ A Python wrapper to provide a convienacne way to generate K identifiers required
 
 ## Perequisites
 - **[Python3](https://www.python.org/)** <br />
+  - **[Biopython](https://biopython.org/)** <br />
 
 - **[SRA-Toolkit](https://www.ncbi.nlm.nih.gov/sra)** <br />
 For downloading FASTA from NCBI <br /> 
@@ -14,7 +15,6 @@ For rapid prokaryotic genome annotation <br />
 - **[SilentGene - prokka2kegg](https://github.com/SilentGene/Bio-py/tree/master/prokka2kegg)** <br />
 For K-id converstion from Prokka's .gbk file  <br />
 
--**[Biopython]
 
 ## Running wrapper
 ### Default setting
