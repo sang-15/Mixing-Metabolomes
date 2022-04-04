@@ -12,9 +12,9 @@ For downloading FASTA from NCBI <br />
 - **[Prokka](https://github.com/tseemann/prokka)** <br />
 For rapid prokaryotic genome annotation <br />
 
-- **[SilentGene - prokka2kegg](https://github.com/SilentGene/Bio-py/tree/master/prokka2kegg)** <br />
-For K-id converstion from Prokka's .gbk file  <br />
-
+## Included within wrapper
+**[SilentGene - prokka2kegg_batch](https://github.com/SilentGene/Bio-py/tree/master/prokka2kegg)** is been used as part of the wrapper to automatically convert annotated gene from Prokka's (.gtk file) to K ids required. <br />
+This python script and database required are included in the wrapper, user does not need to download and install anything for this part.
 
 ## Running wrapper
 ### Default setting
