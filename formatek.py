@@ -1,5 +1,9 @@
 #Here is the code for the wrapper
 
+#Importing libraries
+import glob
+
+
 #Retrieve data 
 
 #TEST DATA:
@@ -92,15 +96,24 @@ os.system('python3 prokka2kegg.py -i prokka.gbk -d idmapping_KO.tab.gz -o sample
 #This is consistent with the output files of automatic annotation servers, BlastKOALA, GhostKOALA, KofamKOALA and KAAS.
 #The dataset may contain lists of K numbers for multiple organisms, each list preceded by the comment line starting with # and optional color specification.
 
-#Load Silent_gene output from previous analysis
-sg_out = open('sample.kegg.out.txt', 'r').read().rstrip().split('\n')
-
-#open output file and write the first organism name
+# Open output file
 outfile = open('formatk_out.txt','w') 
-outfile.write('# ' + 'organism1'+ '\n') #To-do: format the name later
 
-#Loop through each line, identify the line with K ids and write the line to output file named 'formatk_out.txt'
-for line in sg_out:
-    if '\t' in line:
-        outfile.write(line + '\n')
+#Read each prokka outputs 
+for i in glob.glob("*.gbk.ko.out"):
+
+    #Load Silent_gene output
+    sg_out = open(i, 'r').read().rstrip().split('\n')
+
+    #Set organism name
+    org = i[7:-11]
+    
+    #write the first organism name
+    outfile.write('# ' + org + '\n') #To-do: format the name later
+
+    #Loop through each line, identify the line with K ids and write the line to output file named 'formatk_out.txt'
+    for line in sg_out:
+        if '\t' in line:
+            outfile.write(line + '\n')
+            
 outfile.close()
