@@ -5,80 +5,47 @@ import glob
 
 
 #Retrieve data 
+from Bio import Entrez 
+#from Bio import SeqIO
 
-#TEST DATA:
+import os
+import urllib
+
+Entrez.email="lgonzalez7@luc.edu" #email to use entrez
+
 #1= E. coli GCA_002861225.1
 #L. crispatus: GCA_002861815.1 
 #P. mirabilis: GCA_012030515.1 
 
-from Bio import Entrez 
-from Bio import SeqIO
-#import requests
+terms= ["GCA_002861225.1","GCA_002861815.1 ","GCA_012030515.1"] #user input in list form
 
-"""
-NOTES:
-    we are in the assembly database
-    tying to use accession number with efetch
+for item in terms: #loop through accession inputs
+
+    handle = Entrez.esearch(db="assembly", term=item, retype="text") #search assembly database for accession inputs
+    record = Entrez.read(handle) #format handle
+
+
+    for id in record['IdList']: #use id(s) found in handle 
+        
+        # Get Assembly Summary
+        esummary_handle = Entrez.esummary(db="assembly", id=id, report="full")
+        esummary_record = Entrez.read(esummary_handle)
+        
+        # set ftp url for downloading
+        url = esummary_record['DocumentSummarySet']['DocumentSummary'][0]['FtpPath_RefSeq']
+        
+
+    label = os.path.basename(url) #format ftp url for downloading
+    link = os.path.join(url,label+'_genomic.fna.gz') #navigating to folder on website
+    link = link.replace(os.sep, '/') #format -> replace \ with /
+    print("currently downloading " + label + "..." ) #show progress
     
-    *bad request error* due to databse name
     
-    https://www.ncbi.nlm.nih.gov/books/NBK25497/table/chapter2.T._entrez_unique_identifiers_ui/?report=objectonly
+    urllib.request.urlretrieve(link, f'{label}.fna.gz') #command to download file
     
-    above link does not list assembly database reference...
-    
-TODO:
-   - https://www.biostars.org/p/141581/ 
-"""
 
-url = "https://www.ncbi.nlm.nih.gov/assembly/"
-gban = "GCA_002861815.1"
-
-#option 1
-#-------------------------------------------------
-
-Entrez.email="lgonzalez7@luc.edu" #email to use entrez
-
-#def fetchGBFile(genBankAN): #future method name and argument
-handle = Entrez.efetch(db='assembly', id=gban, rettype="gb") #retrieving the file
-"""
-link = gban + ".gb" #preparing to save file with appropriate name and extension 
-file = open(link, 'w') #open file
-file.write(handle.read()) #write data to file
-handle.close() #close handle
-file.close() #close file
-
-def main(): #pseudo main method 
-    fetchGBFile(gban) #calling file
-    
-if __name__ == '__main__': #actual main method
-    main()
-    
-#TODO:
-#convert .gb file to fasta file
-
-
-
-#option 2
-#-------------------------------------------------
-
-url = url + gban #set up url
-
-res = requests.get(url) #use request to download from url
-if res.status_code != 200: #if status code != 200 then there is an error
-    print("ERROR COULD NOT GET FILE") #display error
-    
-with open("GCA_002861225.1", 'w') as fh: #open file
-    fh.write(res.text) #write to text document to show it is working
-    
-for seq_record in SeqIO.parse("GCA_002861225.1", "fasta"): #loop through records
-    print(seq_record.id) #print out some data
-    print(len(seq_record)) #print out some data
-   
-
-"""
-
-#OUTPUT:the output for both optioin 1 and 2 should be species name and fasta
-
+    handle.close()
+        
 
 #Prokka + Silent Gene
 #Use Prokka to annotate inputted genome
