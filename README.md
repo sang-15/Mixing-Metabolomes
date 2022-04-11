@@ -32,11 +32,11 @@ python3 formatek.py -i genome.fasta -t species
 - **-t**: the taxonomy information of the correspoding FASTA
 
 ## Output
-The wrapper will generate a 'Results' folder under '$HOME/' directory, and the folder contains the following: <br />
+The wrapper will generate a 'results' folder under '$HOME/' directory, and the folder contains the following: <br />
 
 - (Default) Downloaded assemble genome data from NCBI
-- Prokka output
-- Silent gene output
+- Prokka folder with Prokka generated outputs 
+- gbk_results folder with prokka2kegg generated outputs 
 - formatek_out.txt <br />
 Final gene list required by KEGG MAPPER
 
