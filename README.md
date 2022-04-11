@@ -35,8 +35,8 @@ python3 formatek.py -i genome.fasta -t species
 The wrapper will generate a 'results' folder under '$HOME/' directory, and the folder contains the following: <br />
 
 - (Default) Downloaded assemble genome data from NCBI
-- Prokka folder with Prokka generated outputs 
-- gbk_results folder with prokka2kegg generated outputs 
+- Prokka folder <br /> Prokka generated outputs 
+- gbk_results folder <br /> prokka2kegg generated outputs 
 - formatek_out.txt <br />
 Final gene list required by KEGG MAPPER
 
