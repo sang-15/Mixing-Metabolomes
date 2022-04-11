@@ -1,16 +1,25 @@
-#Here is the code for the wrapper
-
-#Importing libraries
 import glob
-
-
-#Retrieve data 
 from Bio import Entrez 
 #from Bio import SeqIO
-
 import os
 import urllib
 
+
+#Setup
+#Create the output folder
+os.system('mkdir $HOME/results/')
+
+#Set path
+path = os.path.expanduser('~')
+path = path + '/results/'
+
+#### path for linux: $HOME/results/ ####
+#### path for python: path ####
+#### new files in path for python: path + 'xxx.txt' ####
+
+
+
+#Retrieve data 
 Entrez.email="lgonzalez7@luc.edu" #email to use entrez
 
 #1= E. coli GCA_002861225.1
@@ -85,10 +94,10 @@ os.system('python3 prokka2kegg_batch.py -i $HOME/results/GBK -o $HOME/results/2k
 #The dataset may contain lists of K numbers for multiple organisms, each list preceded by the comment line starting with # and optional color specification.
 
 # Open output file
-outfile = open('formatk_out.txt','w') 
+outfile = open(path+'formatk_out.txt','w') 
 
 #Read each prokka outputs 
-for i in glob.glob("*.gbk.ko.out"):
+for i in glob.glob("$HOME/results/GBK/*.gbk.ko.out"):
 
     #Load Silent_gene output
     sg_out = open(i, 'r').read().rstrip().split('\n')
