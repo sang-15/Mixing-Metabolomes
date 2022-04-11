@@ -68,23 +68,24 @@ for file in files:
     
 genus = ['Escherichia', 'Proteus', 'Lactobacillus'] #CHANGE: list of genus
 species = ['coli', 'mirabilia', 'crispatus'] #CHANGE: list of species
-os.system('mkdir $HOME/results') #make results directory, can change to take input from user
-prokka_results = '$HOME/results/Prokka/' #path for Prokka results
-os.system('mkdir $HOME/results/GBK') #make directory for Prokka .gbk files
+prokka_results = path + 'Prokka/' #path for Prokka results
+gbk_results = path + 'GBK'
+os.system('mkdir ' + gbk_results) #make directory for Prokka .gbk files
 
 for i in range(len(fasta)): #loop over each retrieved record
     prokka_prefix = 'prokka_' + genus[i] + '_' + species[i] #prefix for prokka files
     os.system('prokka --outdir ' + prokka_results + genus[i] + '_' + species[i] + ' --prefix prokka_' + genus[i] + '_' + species[i] + ' --genus ' + genus[i] + ' --species ' + species[i] + ' ' + fasta[i]) #Prokka command
-    os.system('mv ' + prokka_results + genus[i] + '_' + species[i] + '/' + prokka_prefix + '.gbk $HOME/results/GBK') #move .gbk to folder for batch script
+    os.system('mv ' + prokka_results + genus[i] + '_' + species[i] + '/' + prokka_prefix + '.gbk ' + gbk_results) #move .gbk to folder for batch script
 
 
 #SilentGene
 #retrieve and use prokka2kegg_batch to convert to K IDs
 
-#look for ways to see if these files exist before download
-os.system('wget https://raw.githubusercontent.com/SilentGene/Bio-py/master/prokka2kegg/prokka2kegg_batch.py') #download prokka2kegg_batch script
-os.system('wget https://github.com/SilentGene/Bio-py/blob/master/prokka2kegg/idmapping_KO.tab.gz?raw=true') #download prokka2kegg database
-os.system('python3 prokka2kegg_batch.py -i $HOME/results/GBK -o $HOME/results/2kegg/ -d idmapping_KO.tab.gz?raw=true') #convert to K id's
+if not os.path.exists(path + 'prokka2kegg_batch.py'): #check if script and db already exist
+    os.system('wget https://raw.githubusercontent.com/SilentGene/Bio-py/master/prokka2kegg/prokka2kegg_batch.py -P ' + path) #download prokka2kegg_batch script
+    os.system('wget https://github.com/SilentGene/Bio-py/blob/master/prokka2kegg/idmapping_KO.tab.gz?raw=true -P ' + path) #download prokka2kegg database
+
+os.system('python3 ' + path + 'prokka2kegg_batch.py -i ' + gbk_results + ' -o ' + path + '2kegg/ -d ' + path + 'idmapping_KO.tab.gz?raw=true') #convert to K id's
 
 #Aggrgation
 
