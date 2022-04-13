@@ -1,10 +1,10 @@
 import glob
 from Bio import Entrez 
-#from Bio import SeqIO
 import os
 import urllib
 import os.path
-
+import json
+import argparse
 
 #Setup
 #Create the output folder
@@ -19,16 +19,29 @@ path = path + '/results/'
 #### new files in path for python: path + 'xxx.txt' ####
 
 
-
 #Retrieve data 
-Entrez.email="lgonzalez7@luc.edu" #email to use entrez
+
+test ='{"Escherichia coli": "GCA_002861225.1","Lactobacillus crispatus": "GCA_002861815.1"}'
+
+parser = argparse.ArgumentParser(description="Enter in genus species and its corresponding accession number in python dictonary notation with -i (Be sure to include quotes!) and your email for entrez with -e. \n Ex. {\"Escherichia coli\": \"GCA_002861225.1\",\"Lactobacillus crispatus\": \"GCA_002861815.1\"}") 
+#above line: create parser object and set description for user to learn input format
+parser.add_argument('-i','--input', type=json.loads) #-i or --input set to take a json.load as argument 
+parser.add_argument('-e', '--email', help='enter your email so entrez knows who you are')
+
+args = parser.parse_args() # read input
+
+speciesDict = args.input #create a variable for dictionary so you don't have to call args.input
+
+
+terms = list(speciesDict.values()) #user input in list form
+
+
+Entrez.email=args.email #email to use entrez
+
 
 #1= E. coli GCA_002861225.1
 #L. crispatus: GCA_002861815.1 
 #P. mirabilis: GCA_012030515.1 
-
-terms= ["GCA_002861225.1","GCA_002861815.1 ","GCA_012030515.1"] #user input in list form
-files = [] #list of files to be produced during downloads
 
 for item in terms: #loop through accession inputs
 
@@ -54,8 +67,6 @@ for item in terms: #loop through accession inputs
     
     urllib.request.urlretrieve(link, f'{label}.fna.gz') #command to download file
     
-    files.append(label + '.fna.gz') #add file name to file list
-
     handle.close()
         
 
