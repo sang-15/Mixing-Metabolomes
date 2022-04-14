@@ -23,12 +23,17 @@ path = path + '/results/'
 
 test ='{"Escherichia coli": "GCA_002861225.1","Lactobacillus crispatus": "GCA_002861815.1"}'
 
+
 parser = argparse.ArgumentParser(description="Enter in genus species and its corresponding accession number in python dictonary notation with -i (Be sure to include quotes!) and your email for entrez with -e. \n Ex. {\"Escherichia coli\": \"GCA_002861225.1\",\"Lactobacillus crispatus\": \"GCA_002861815.1\"}") 
 #above line: create parser object and set description for user to learn input format
 parser.add_argument('-i','--input', type=json.loads) #-i or --input set to take a json.load as argument 
 parser.add_argument('-e', '--email', help='enter your email so entrez knows who you are')
 
-args = parser.parse_args() # read input
+
+# test input = python3 Final2.py -e lgonzalez7@luc.edu -i {"Escherichia coli": "GCA_002861225.1","Lactobacillus crispatus": "GCA_002861815.1"}
+#args = parser.parse_args(["-e","lgonzalez7@luc.edu", "-i", test]) # read input for py
+args = parser.parse_args() #reads input for linux
+
 
 speciesDict = args.input #create a variable for dictionary so you don't have to call args.input
 
@@ -37,7 +42,7 @@ terms = list(speciesDict.values()) #user input in list form
 
 
 Entrez.email=args.email #email to use entrez
-
+#Entrez.email="lgonzalez7@luc.edu"
 
 #1= E. coli GCA_002861225.1
 #L. crispatus: GCA_002861815.1 
@@ -62,12 +67,14 @@ for item in terms: #loop through accession inputs
     label = os.path.basename(url) #format ftp url for downloading
     link = os.path.join(url,label+'_genomic.fna.gz') #navigating to folder on website
     link = link.replace(os.sep, '/') #format -> replace \ with /
-    print("currently downloading " + label + "..." ) #show progress
+    print("currently downloading " + label + "...\n" ) #show progress
     
     
     urllib.request.urlretrieve(link, f'{label}.fna.gz') #command to download file
     
+
     handle.close()
+
         
 
 #Prokka
