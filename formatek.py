@@ -21,9 +21,6 @@ path = path + '/results/'
 
 #Retrieve data 
 
-#TODO: Missing downloading path#
-#TODO: Add formate explain for tax info: follow the formate of species infomation 'Genus species' eg: Escherichia coli#
-
 test ='{"Escherichia coli": "GCA_002861225.1","Lactobacillus crispatus": "GCA_002861815.1"}'
 
 
@@ -97,7 +94,6 @@ for spec in split_name: #loop through list of split genus/species
     genus.append(spec[0]) #add first element to genus list
     species.append(spec[1]) #add second element to species list
 
-#TODO: Maybe add if statement to distinguish zipped and ready file#
 fasta = [] #list of fasta files
 for file in files:
     os.system('gunzip ' + file) #unzip fasta files
