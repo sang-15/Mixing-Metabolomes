@@ -124,22 +124,24 @@ os.system('python3 ' + path + 'prokka2kegg_batch.py -i ' + gbk_results + ' -o ' 
 #Query data for KEGG MAPPER
 #Two-column dataset with K numbers in the second column, optionally preceded by the user's identifiers in the first column.
 #This is consistent with the output files of automatic annotation servers, BlastKOALA, GhostKOALA, KofamKOALA and KAAS.
-#The dataset may contain lists of K numbers for multiple organisms, each list preceded by the comment line starting with # and optional color specification.
+#The dataset may contain lists of K numbers for multiple organisms, each list preceded by the comment line starting with #.
 
 # Open output file
 outfile = open(path+'formatk_out.txt','w') 
 
 #Read each prokka outputs 
-for i in glob.glob("$HOME/results/2kegg/*.gbk.ko.out"):
+for i in glob.glob(path+"2kegg/*.gbk.ko.out"):
 
     #Load Silent_gene output
     sg_out = open(i, 'r').read().rstrip().split('\n')
 
     #Set organism name
-    org = i[7:-11]
+    org = i.split('/')
+    org = org[-1]
+    org = org[7:-11]
     
-    #write the first organism name
-    outfile.write('# ' + org + '\n') #To-do: format the name later
+    #write each organism name
+    outfile.write('# ' + org + '\n') 
 
     #Loop through each line, identify the line with K ids and write the line to output file named 'formatk_out.txt'
     for line in sg_out:
