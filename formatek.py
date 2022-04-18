@@ -48,6 +48,8 @@ Entrez.email=args.email #email to use entrez
 #L. crispatus: GCA_002861815.1 
 #P. mirabilis: GCA_012030515.1 
 
+files = [] #empty list of file names
+
 for item in terms: #loop through accession inputs
 
     handle = Entrez.esearch(db="assembly", term=item, retype="text") #search assembly database for accession inputs
@@ -72,6 +74,7 @@ for item in terms: #loop through accession inputs
     
     urllib.request.urlretrieve(link, f'{label}.fna.gz') #command to download file
     
+    files.append(label + '.fna.gz') #add file name to file list
 
     handle.close()
 
@@ -79,14 +82,24 @@ for item in terms: #loop through accession inputs
 
 #Prokka
 #Use Prokka to annotate inputted genome
+full_species_name = list(speciesDict.keys()) #user input for genus/species name in list
+
+split_name = [] #list for split names
+for name in full_species_name: #loop through list of genus/species
+    split_name.append(name.split()) #split genus and species into list
+    
+genus = [] #list of genus
+species = [] #list of species
+for spec in split_name: #loop through list of split genus/species
+    genus.append(spec[0]) #add first element to genus list
+    species.append(spec[1]) #add second element to species list
+
 fasta = [] #list of fasta files
 for file in files:
     os.system('gunzip ' + file) #unzip fasta files
     file = file[:-3] #remove .gz 
     fasta.append(file) #add file to list of fasta files
     
-genus = ['Escherichia', 'Proteus', 'Lactobacillus'] #CHANGE: list of genus
-species = ['coli', 'mirabilia', 'crispatus'] #CHANGE: list of species
 prokka_results = path + 'Prokka/' #path for Prokka results
 gbk_results = path + 'GBK'
 os.system('mkdir ' + gbk_results) #make directory for Prokka .gbk files
