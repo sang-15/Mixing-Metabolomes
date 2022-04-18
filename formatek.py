@@ -134,7 +134,7 @@ os.system('python3 ' + path + 'prokka2kegg_batch.py -i ' + gbk_results + ' -o ' 
 outfile = open(path+'formatk_out.txt','w') 
 
 #Read each prokka outputs 
-for i in glob.glob("$HOME/results/GBK/*.gbk.ko.out"):
+for i in glob.glob("$HOME/results/GBK/*.gbk"):
 
     #Load Silent_gene output
     sg_out = open(i, 'r').read().rstrip().split('\n')
