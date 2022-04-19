@@ -23,9 +23,9 @@ path = path + '/results/'
 
 test ='{"Escherichia coli": "GCA_002861225.1","Lactobacillus crispatus": "GCA_002861815.1"}'
 
-newpath = r'$HOME\results\downloads' 
+newpath = '$HOME/results/downloads' 
 if not os.path.exists(newpath):
-    os.makedirs(newpath)
+    os.system('mkdir ' + newpath)
 
 parser = argparse.ArgumentParser(description="Enter in genus species and its corresponding accession number in python dictonary notation with -i (Be sure to include quotes!) and your email for entrez with -e. \n Ex. {\"Escherichia coli\": \"GCA_002861225.1\",\"Lactobacillus crispatus\": \"GCA_002861815.1\"}") 
 #above line: create parser object and set description for user to learn input format
@@ -51,65 +51,72 @@ Entrez.email=args.email #email to use entrez
 #L. crispatus: GCA_002861815.1 
 #P. mirabilis: GCA_012030515.1 
 
+files = dict() #empty dict of file names
 for item in terms: #loop through accession inputs
 
-    handle = Entrez.esearch(db="assembly", term=item, retype="text") #search assembly database for accession inputs
-    record = Entrez.read(handle) #format handle
-
-
-    for id in record['IdList']: #use id(s) found in handle 
-        
-        # Get Assembly Summary
-        esummary_handle = Entrez.esummary(db="assembly", id=id, report="full")
-        esummary_record = Entrez.read(esummary_handle)
-        
-        # set ftp url for downloading
-        url = esummary_record['DocumentSummarySet']['DocumentSummary'][0]['FtpPath_RefSeq']
+    if '.fasta' in item or '.fna' in item: # if term is user supplied file
+        print('User supplied file: ' + item)
+        files[item] = item #append path to files list directly
     
-    print("this is the url variable: " + url)
+    else:
 
-    label = os.path.basename(url) #format ftp url for downloading
-    link = os.path.join(url,label+'_genomic.fna.gz') #navigating to folder on website
-    link = link.replace(os.sep, '/') #format -> replace \ with /
-    print("currently downloading " + label + "...\n" ) #show progress
+        handle = Entrez.esearch(db="assembly", term=item, retype="text") #search assembly database for accession inputs
+        record = Entrez.read(handle) #format handle
+
+
+        for id in record['IdList']: #use id(s) found in handle 
+        
+            # Get Assembly Summary
+            esummary_handle = Entrez.esummary(db="assembly", id=id, report="full")
+            esummary_record = Entrez.read(esummary_handle)
+        
+            # set ftp url for downloading
+            url = esummary_record['DocumentSummarySet']['DocumentSummary'][0]['FtpPath_RefSeq']
+    
+        print("this is the url variable: " + url)
+
+        label = os.path.basename(url) #format ftp url for downloading
+        link = os.path.join(url,label+'_genomic.fna.gz') #navigating to folder on website
+        link = link.replace(os.sep, '/') #format -> replace \ with /
+        print("currently downloading " + label + "...\n" ) #show progress
     
    
-    #urllib.request.urlretrieve(link, f'C:\\\\{label}.fna.gz')
+        #urllib.request.urlretrieve(link, f'C:\\\\{label}.fna.gz')
     
-    urllib.request.urlretrieve(link, f'$HOME/results/downloads/{label}.fna.gz') #command to download file
+        urllib.request.urlretrieve(link, f'$HOME/results/downloads/{label}.fna.gz') #command to download file
+       
+        files[item] = path + 'downloads/' + label + '.fna.gz' #add file name to file dict
     
-
-    handle.close()
+        handle.close()
       
 
 #Prokka
 #Use Prokka to annotate inputted genome
 full_species_name = list(speciesDict.keys()) #user input for genus/species name in list
 
-split_name = [] #list for split names
-for name in full_species_name: #loop through list of genus/species
-    split_name.append(name.split()) #split genus and species into list
-    
-genus = [] #list of genus
-species = [] #list of species
-for spec in split_name: #loop through list of split genus/species
-    genus.append(spec[0]) #add first element to genus list
-    species.append(spec[1]) #add second element to species list
-
-fasta = [] #list of fasta files
-for file in files:
-    os.system('gunzip ' + file) #unzip fasta files
-    file = file[:-3] #remove .gz 
-    fasta.append(file) #add file to list of fasta files
+split_name = dict() #dictionary for split names
+for name in speciesDict.keys(): #loop through list of names
+    split_name[speciesDict[name]] = name.split() #split genus and species into list and add to dict
+ 
+fasta = dict() #list of fasta files
+for accession in files.keys(): #loop through file paths
+    if '.gz' in files[accession]: #if file is zipped
+        os.system('gunzip ' + files[accession]) #unzip fasta files
+        file = files[accession][:-3] #remove .gz 
+        fasta[accession] = file #add file to list of fasta files
+    else:
+        fasta[accession] = files[accession] #if not zipped, append file path without further action
     
 prokka_results = path + 'Prokka/' #path for Prokka results
 gbk_results = path + 'GBK'
 os.system('mkdir ' + gbk_results) #make directory for Prokka .gbk files
 
-for i in range(len(fasta)): #loop over each retrieved record
-    prokka_prefix = 'prokka_' + genus[i] + '_' + species[i] #prefix for prokka files
-    os.system('prokka --outdir ' + prokka_results + genus[i] + '_' + species[i] + ' --prefix prokka_' + genus[i] + '_' + species[i] + ' --genus ' + genus[i] + ' --species ' + species[i] + ' ' + fasta[i]) #Prokka command
-    os.system('mv ' + prokka_results + genus[i] + '_' + species[i] + '/' + prokka_prefix + '.gbk ' + gbk_results) #move .gbk to folder for batch script
+for entry in fasta.keys(): #loop over each accession
+    genus = split_name[entry][0] #retrieve genus name
+    species = split_name[entry][1] #retrieve species name
+    prokka_prefix = 'prokka_' + genus + '_' + species #prefix for prokka files    
+    os.system('prokka --outdir ' + prokka_results + genus + '_' + species + ' --prefix prokka_' + genus + '_' + species + ' --genus ' + genus + ' --species ' + species + ' ' + fasta[entry]) #Prokka command
+    os.system('mv ' + prokka_results + genus + '_' + species + '/' + prokka_prefix + '.gbk ' + gbk_results) #move .gbk to folder for batch script
 
 
 #SilentGene
