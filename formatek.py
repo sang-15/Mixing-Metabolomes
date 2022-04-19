@@ -23,6 +23,9 @@ path = path + '/results/'
 
 test ='{"Escherichia coli": "GCA_002861225.1","Lactobacillus crispatus": "GCA_002861815.1"}'
 
+newpath = r'$HOME\results\downloads' 
+if not os.path.exists(newpath):
+    os.makedirs(newpath)
 
 parser = argparse.ArgumentParser(description="Enter in genus species and its corresponding accession number in python dictonary notation with -i (Be sure to include quotes!) and your email for entrez with -e. \n Ex. {\"Escherichia coli\": \"GCA_002861225.1\",\"Lactobacillus crispatus\": \"GCA_002861815.1\"}") 
 #above line: create parser object and set description for user to learn input format
@@ -48,8 +51,6 @@ Entrez.email=args.email #email to use entrez
 #L. crispatus: GCA_002861815.1 
 #P. mirabilis: GCA_012030515.1 
 
-files = [] #empty list of file names
-
 for item in terms: #loop through accession inputs
 
     handle = Entrez.esearch(db="assembly", term=item, retype="text") #search assembly database for accession inputs
@@ -64,21 +65,22 @@ for item in terms: #loop through accession inputs
         
         # set ftp url for downloading
         url = esummary_record['DocumentSummarySet']['DocumentSummary'][0]['FtpPath_RefSeq']
-        
+    
+    print("this is the url variable: " + url)
 
     label = os.path.basename(url) #format ftp url for downloading
     link = os.path.join(url,label+'_genomic.fna.gz') #navigating to folder on website
     link = link.replace(os.sep, '/') #format -> replace \ with /
     print("currently downloading " + label + "...\n" ) #show progress
     
+   
+    #urllib.request.urlretrieve(link, f'C:\\\\{label}.fna.gz')
     
-    urllib.request.urlretrieve(link, f'{label}.fna.gz') #command to download file
+    urllib.request.urlretrieve(link, f'$HOME/results/downloads/{label}.fna.gz') #command to download file
     
-    files.append(label + '.fna.gz') #add file name to file list
 
     handle.close()
-
-        
+      
 
 #Prokka
 #Use Prokka to annotate inputted genome
