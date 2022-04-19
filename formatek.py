@@ -21,6 +21,13 @@ path = path + '/results/'
 
 #Retrieve data 
 
+from Bio import Entrez 
+import json
+import os
+import urllib
+import argparse
+import os.path
+
 test ='{"Escherichia coli": "GCA_002861225.1","Lactobacillus crispatus": "GCA_002861815.1"}'
 
 newpath = '$HOME/results/downloads' 
@@ -83,11 +90,13 @@ for item in terms: #loop through accession inputs
    
         #urllib.request.urlretrieve(link, f'C:\\\\{label}.fna.gz')
     
-        urllib.request.urlretrieve(link, f'$HOME/results/downloads/{label}.fna.gz') #command to download file
+        urllib.request.urlretrieve(link, f'/results/downloads/{label}.fna.gz') #command to download file
        
         files[item] = path + 'downloads/' + label + '.fna.gz' #add file name to file dict
     
         handle.close()
+
+
       
 
 #Prokka
