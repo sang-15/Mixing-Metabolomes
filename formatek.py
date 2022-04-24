@@ -57,33 +57,42 @@ Entrez.email=args.email #email to use entrez
 if Entrez.email == None:
 	Entrez.email="ylin22@luc.edu"
 
+files = dict() #empty dict of file names
 
 for item in terms: #loop through accession inputs
 
-    handle = Entrez.esearch(db="assembly", term=item, retype="text") #search assembly database for accession inputs
-    record = Entrez.read(handle) #format handle
-
-
-    for id in record['IdList']: #use id(s) found in handle 
-        
-        # Get Assembly Summary
-        esummary_handle = Entrez.esummary(db="assembly", id=id, report="full")
-        esummary_record = Entrez.read(esummary_handle)
-        
-        # set ftp url for downloading
-        url = esummary_record['DocumentSummarySet']['DocumentSummary'][0]['FtpPath_RefSeq']
+    if '.fasta' in item or '.fna' in item: # if term is user supplied file
+        print('User supplied file: ' + item)
+        files[item] = item #append path to files list directly
     
+    else:
 
-    label = os.path.basename(url) #format ftp url for downloading
-    link = os.path.join(url,label+'_genomic.fna.gz') #navigating to folder on website
-    link = link.replace(os.sep, '/') #format -> replace \ with /
-    print("currently downloading " + label + "...\n" ) #show progress 
-    
+        handle = Entrez.esearch(db="assembly", term=item, retype="text") #search assembly database for accession inputs
+        record = Entrez.read(handle) #format handle
+
+
+        for id in record['IdList']: #use id(s) found in handle 
         
-    urllib.request.urlretrieve(link, homeDir + f'/results/downloads/{label}.fna.gz') #command to download file linux
+            # Get Assembly Summary
+            esummary_handle = Entrez.esummary(db="assembly", id=id, report="full")
+            esummary_record = Entrez.read(esummary_handle)
+        
+            # set ftp url for downloading
+            url = esummary_record['DocumentSummarySet']['DocumentSummary'][0]['FtpPath_RefSeq']
     
+        print("this is the url variable: " + url)
 
-    handle.close()
+        label = os.path.basename(url) #format ftp url for downloading
+        link = os.path.join(url,label+'_genomic.fna.gz') #navigating to folder on website
+        link = link.replace(os.sep, '/') #format -> replace \ with /
+        print("currently downloading " + label + "...\n" ) #show progress
+    
+       
+        urllib.request.urlretrieve(link, homeDir + f'/results/downloads/{label}.fna.gz') #command to download file linux       
+        
+        files[item] = newpath + label + '.fna.gz' #add file name to file dict
+    
+        handle.close()
 
       
 
