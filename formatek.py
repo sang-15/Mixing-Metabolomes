@@ -90,7 +90,7 @@ for item in terms: #loop through accession inputs
        
         urllib.request.urlretrieve(link, homeDir + f'/results/downloads/{label}.fna.gz') #command to download file linux       
         
-        files[item] = newpath + label + '.fna.gz' #add file name to file dict
+        files[item] = newpath + '/' + label + '.fna.gz' #add file name to file dict
     
         handle.close()
 
