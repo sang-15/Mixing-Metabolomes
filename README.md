@@ -1,5 +1,5 @@
 # Overview
-This is the repository created for COMP483 group project #2: <br />
+This is the repository created for COMP483 Project by group 2: <br />
 A Python wrapper to provide a convienacne way to generate K identifiers required for [KEGG Mapper](https://www.genome.jp/kegg/mapper/reconstruct.html), by giving assembled genome sequences. 
 
 ## Perequisites
@@ -42,11 +42,11 @@ The following code will run the wrapper with user specified FASTA<br />
 
 - Runing 1 sample: Escherichia_coli.FASTA
 ```
-python3 formatek.py -i '{"Escherichia coli": "LOCATION\.FASTA"}' -e useremail
+python3 formatk.py -i '{"Escherichia coli": "LOCATION\.FASTA"}' -e useremail
 ```
 - Runing multiple samples: Escherichia_coli.FASTA and Lactobacillus_crispatus.FASTA
 ```
-python3 formatek.py \
+python3 formatk.py \
 -i '{"Escherichia coli": "DIR/Escherichia_coli.FASTA", "Lactobacillus crispatus": "DIR/Lactobacillus_crispatus.FASTA"}' \
 -e useremail
 ```
@@ -55,7 +55,7 @@ python3 formatek.py \
 The following code will run the wrapper with mixed GenBank assembly accession and user specified FASTA<br />
 - Runing multiple samples: [GCA_002861225.1](https://www.ncbi.nlm.nih.gov/assembly/GCA_002861225.1) and Lactobacillus_crispatus.FASTA
 ```
-python3 formatek.py \
+python3 formatk.py \
 -i '{"Escherichia coli": "GCA_002861225.1", "Lactobacillus crispatus": "DIR/Lactobacillus_crispatus.FASTA"}' \
 -e useremail
 ```
@@ -66,7 +66,7 @@ The wrapper will generate a 'results' folder under '$HOME/' directory, and the f
 - (Default) Downloaded assemble genome data from NCBI
 - Prokka folder <br /> Prokka generated outputs 
 - gbk_results folder <br /> prokka2kegg generated outputs 
-- formatek_out.txt <br />
+- formatk_out.txt <br />
 Final gene list required by KEGG MAPPER
 
 
