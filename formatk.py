@@ -11,8 +11,8 @@ from datetime import datetime
 parser = argparse.ArgumentParser(description="Enter in genus species and its corresponding accession number in python dictonary notation with -i (Be sure to include quotes!) and your email for entrez with -e. \n Ex. {\"Escherichia coli\": \"GCA_002861225.1\",\"Lactobacillus crispatus\": \"GCA_002861815.1\"}") 
 #above line: create parser object and set description for user to learn input format
 parser.add_argument('-i','--input', type=json.loads) #-i or --input set to take a json.load as argument 
-parser.add_argument('-e', '--email', help='enter your email so entrez knows who you are')
-parser.add_argument('-o', '--output', default = 'formatkresults', help ='Directory for output')
+parser.add_argument('-e', '--email', default = 'ylin22@luc.edu', help='enter your email so entrez knows who you are')
+parser.add_argument('-o', '--output', default = 'formatkresults', help ='Name for output directory')
 
 args = parser.parse_args() #reads input for linux
 
@@ -42,8 +42,6 @@ terms = list(speciesDict.keys()) #user input in list form
 
 
 Entrez.email=args.email #email to use entrez
-if Entrez.email == None:
-	Entrez.email="ylin22@luc.edu"
 
 files = dict() #empty dict of file names
 
