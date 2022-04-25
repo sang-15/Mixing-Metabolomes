@@ -19,7 +19,7 @@ The python script and database required for prokka2kegg are included in the wrap
 ## Running wrapper
 **-i**: (required) Specifiey the Taxonomy information and FASTA source for each sample in a json format<br />
 **-e**: (required) Email used for Biopython <br />
-**-o**: (optional) An optional flag for user to name the output folder for each run. Defalt will give output in a folder named 'formatk-result'.
+**-o**: (optional) An optional flag for user to name the output folder for each run. Defalt will give output in a folder named 'formatkresults'.
 
 ### GenBank assembly accession
 
@@ -59,7 +59,7 @@ python3 formatk.py \
 -i '{"Escherichia coli": "GCA_002861225.1", "Lactobacillus crispatus": "DIR/Lactobacillus_crispatus.FASTA"}' \
 -e useremail
 ```
-### With optional flag -r
+### With optional flag -o
 The following code will run the wrapper by giving GenBank assembly accession ([GCA_002861225.1](https://www.ncbi.nlm.nih.gov/assembly/GCA_002861225.1)) and give the results in a folder named **'formatk-result-TESTRUN'** under '$HOME/' directory
 ```
 python3 formatk.py -i '{"Escherichia coli": "GCA_002861225.1"}' -e useremail -o TESTRUN
