@@ -6,6 +6,7 @@ import urllib
 import os.path
 import json
 import argparse
+from datetime import datetime
 
 parser = argparse.ArgumentParser(description="Enter in genus species and its corresponding accession number in python dictonary notation with -i (Be sure to include quotes!) and your email for entrez with -e. \n Ex. {\"Escherichia coli\": \"GCA_002861225.1\",\"Lactobacillus crispatus\": \"GCA_002861815.1\"}") 
 #above line: create parser object and set description for user to learn input format
@@ -37,7 +38,7 @@ if not os.path.exists(newpath):
 speciesDict = args.input #create a variable for dictionary so you don't have to call args.input
 
 
-terms = list(speciesDict.values()) #user input in list form
+terms = list(speciesDict.keys()) #user input in list form
 
 
 Entrez.email=args.email #email to use entrez
@@ -85,11 +86,11 @@ for item in terms: #loop through accession inputs
 
 #Prokka
 #Use Prokka to annotate inputted genome
-full_species_name = list(speciesDict.keys()) #user input for genus/species name in list
+#full_species_name = list(speciesDict.values()) #user input for genus/species name in list
 
 split_name = dict() #dictionary for split names
-for name in speciesDict.keys(): #loop through list of names
-    split_name[speciesDict[name]] = name.split() #split genus and species into list and add to dict
+for i in speciesDict.keys(): #loop through list of names
+    split_name[i] = speciesDict[i].split() #split genus and species into list and add to dict
  
 fasta = dict() #list of fasta files
 for accession in files.keys(): #loop through file paths
@@ -105,11 +106,14 @@ gbk_results = path + 'GBK'
 os.system('mkdir ' + gbk_results) #make directory for Prokka .gbk files
 
 for entry in fasta.keys(): #loop over each accession
+    now = datetime.now() #get current date and time
+    current = now.strftime("%H%M%S") #get current time as string
     genus = split_name[entry][0] #retrieve genus name
     species = split_name[entry][1] #retrieve species name
-    prokka_prefix = 'prokka_' + genus + '_' + species #prefix for prokka files    
-    os.system('prokka --outdir ' + prokka_results + genus + '_' + species + ' --prefix prokka_' + genus + '_' + species + ' --genus ' + genus + ' --species ' + species + ' ' + fasta[entry]) #Prokka command
-    os.system('mv ' + prokka_results + genus + '_' + species + '/' + prokka_prefix + '.gbk ' + gbk_results) #move .gbk to folder for batch script
+    suffix = genus + '_' + species + '_' + current #genus_species_HHMMS
+    prokka_prefix = 'prokka_' + suffix #prefix for prokka files    
+    os.system('prokka --outdir ' + prokka_results + suffix + ' --prefix prokka_' + suffix + ' --genus ' + genus + ' --species ' + species + ' ' + fasta[entry]) #Prokka command
+    os.system('mv ' + prokka_results + suffix + '/' + prokka_prefix + '.gbk ' + gbk_results) #move .gbk to folder for batch script
 
 
 #SilentGene
