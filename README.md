@@ -18,7 +18,7 @@ The python script and database required for prokka2kegg are included in the wrap
 
 ## Running wrapper
 **-i**: (required) Specifiey the  FASTA source and Taxonomy information for each sample in a json format<br />
-**-e**: (required) Email used for Biopython <br />
+**-e**: (oprional) Email used for Biopython <br />
 **-o**: (optional) An optional flag for user to name the output folder for each run. Defalt will give output in a folder named 'formatkresults'.
 
 ### GenBank assembly accession
@@ -27,13 +27,12 @@ The following code will run the wrapper by giving GenBank assembly accession <br
 
 - Runing 1 sample: [GCA_002861225.1](https://www.ncbi.nlm.nih.gov/assembly/GCA_002861225.1)
 ```
-python3 formatk.py -i '{"GCA_002861225.1": "Escherichia coli"}' -e useremail
+python3 formatk.py -i '{"GCA_002861225.1": "Escherichia coli"}' 
 ```
 - Runing multiple samples: [GCA_002861225.1](https://www.ncbi.nlm.nih.gov/assembly/GCA_002861225.1) and [GCA_002861815.1](https://www.ncbi.nlm.nih.gov/assembly/GCA_002861815.1)
 ```
 python3 formatk.py \
--i '{"GCA_002861225.1": "Escherichia coli", "GCA_002861815.1": "Lactobacillus crispatus"}' \
--e useremail
+-i '{"GCA_002861225.1": "Escherichia coli", "GCA_002861815.1": "Lactobacillus crispatus"}'
 ```
 
 ### User specified FASTA
@@ -42,13 +41,12 @@ The following code will run the wrapper with user specified FASTA<br />
 
 - Runing 1 sample: Escherichia_coli.FASTA
 ```
-python3 formatk.py -i '{"LOCATION\.FASTA": "Escherichia coli"}' -e useremail
+python3 formatk.py -i '{"LOCATION\.FASTA": "Escherichia coli"}' 
 ```
 - Runing multiple samples: Escherichia_coli.FASTA and Lactobacillus_crispatus.FASTA
 ```
 python3 formatk.py \
--i '{"Escherichia coli": "DIR/Escherichia_coli.FASTA", "DIR/Lactobacillus_crispatus.FASTA": "Lactobacillus crispatus"}' \
--e useremail
+-i '{"Escherichia coli": "DIR/Escherichia_coli.FASTA", "DIR/Lactobacillus_crispatus.FASTA": "Lactobacillus crispatus"}' 
 ```
 
 ### Mixing both GenBank assembly accession and user specified FASTA
@@ -56,13 +54,12 @@ The following code will run the wrapper with mixed GenBank assembly accession an
 - Runing multiple samples: [GCA_002861225.1](https://www.ncbi.nlm.nih.gov/assembly/GCA_002861225.1) and Lactobacillus_crispatus.FASTA
 ```
 python3 formatk.py \
--i '{"GCA_002861225.1": "Escherichia coli", "DIR/Lactobacillus_crispatus.FASTA": "Lactobacillus crispatus"}' \
--e useremail
+-i '{"GCA_002861225.1": "Escherichia coli", "DIR/Lactobacillus_crispatus.FASTA": "Lactobacillus crispatus"}' 
 ```
-### With optional flag -o
-The following code will run the wrapper by giving GenBank assembly accession ([GCA_002861225.1](https://www.ncbi.nlm.nih.gov/assembly/GCA_002861225.1)) and give the results in a folder named **'formatk-result-TESTRUN'** under '$HOME/' directory
+### With optional flags -o and -e
+The following code will run the wrapper by giving GenBank assembly accession ([GCA_002861225.1](https://www.ncbi.nlm.nih.gov/assembly/GCA_002861225.1)) and give the results in a folder named **'formatk-result-TESTRUN'** under '$HOME/' directory with your own email
 ```
-python3 formatk.py -i '{"GCA_002861225.1": "Escherichia coli"}' -e useremail -o TESTRUN
+python3 formatk.py -i '{"GCA_002861225.1": "Escherichia coli"}' -e useremail -o TESTRUN 
 ```
 
 ## Output
