@@ -41,7 +41,7 @@ The following code will run the wrapper with user specified FASTA<br />
 
 - Runing 1 sample: Escherichia_coli.FASTA
 ```
-python3 formatk.py -i '{"LOCATION\.FASTA": "Escherichia coli"}' 
+python3 formatk.py -i '{"DIR/Escherichia_coli.FASTA": "Escherichia coli"}' 
 ```
 - Runing multiple samples: Escherichia_coli.FASTA and Lactobacillus_crispatus.FASTA
 ```
