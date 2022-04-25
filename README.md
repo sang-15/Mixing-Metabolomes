@@ -63,9 +63,11 @@ python3 formatk.py \
 ## Output
 The wrapper will generate a 'results' folder under '$HOME/' directory, and the folder contains the following: <br />
 
-- (Default) Downloaded assemble genome data from NCBI
-- Prokka folder <br /> Prokka generated outputs 
-- gbk_results folder <br /> prokka2kegg generated outputs 
+- Downloaded assemble genome data from NCBI (if applicable)
+- Prokka folder <br /> 
+Prokka generated outputs 
+- gbk_results folder <br /> 
+prokka2kegg generated outputs 
 - formatk_out.txt <br />
 Final gene list required by KEGG MAPPER
 
