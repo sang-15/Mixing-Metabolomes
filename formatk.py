@@ -1,3 +1,4 @@
+
 import glob
 from Bio import Entrez 
 import os
@@ -6,47 +7,33 @@ import os.path
 import json
 import argparse
 
+parser = argparse.ArgumentParser(description="Enter in genus species and its corresponding accession number in python dictonary notation with -i (Be sure to include quotes!) and your email for entrez with -e. \n Ex. {\"Escherichia coli\": \"GCA_002861225.1\",\"Lactobacillus crispatus\": \"GCA_002861815.1\"}") 
+#above line: create parser object and set description for user to learn input format
+parser.add_argument('-i','--input', type=json.loads) #-i or --input set to take a json.load as argument 
+parser.add_argument('-e', '--email', help='enter your email so entrez knows who you are')
+parser.add_argument('-o', '--output', default = 'formatkresults', help ='Directory for output')
+
+args = parser.parse_args() #reads input for linux
+
+outputdir = args.output
 #Setup
 #Create the output folder
-os.system('mkdir $HOME/results/')
+os.system('mkdir ' + outputdir)
 
 #Set path
 path = os.path.expanduser('~')
-path = path + '/results/'
+path = path + '/' + outputdir + '/'
 
 #### path for linux: $HOME/results/ ####
 #### path for python: path ####
 #### new files in path for python: path + 'xxx.txt' ####
 
 
-#Retrieve data 
-
-from Bio import Entrez 
-import json
-import os
-import urllib
-import argparse
-import os.path
-
-test ='{"Escherichia coli": "GCA_002861225.1","Lactobacillus crispatus": "GCA_002861815.1"}'
-homeDir = os.path.expanduser('~')
-
-newpath = homeDir + '/results/downloads' 
+newpath = path + 'downloads/' #path to download files
 if not os.path.exists(newpath):
-    os.system('mkdir ' + newpath)
+    os.system('mkdir ' + newpath) #create path to download files
 
-parser = argparse.ArgumentParser(description="Enter in genus species and its corresponding accession number in python dictonary notation with -i (Be sure to include quotes!) and your email for entrez with -e. \n Ex. {\"Escherichia coli\": \"GCA_002861225.1\",\"Lactobacillus crispatus\": \"GCA_002861815.1\"}") 
-#above line: create parser object and set description for user to learn input format
-parser.add_argument('-i','--input', type=json.loads) #-i or --input set to take a json.load as argument 
-parser.add_argument('-e', '--email', help='enter your email so entrez knows who you are')
-
-
-# test input = python3 Final2.py -e lgonzalez7@luc.edu -i {"Escherichia coli": "GCA_002861225.1","Lactobacillus crispatus": "GCA_002861815.1"}
-#args = parser.parse_args(["-e","lgonzalez7@luc.edu", "-i", test]) # read input for py
-
-args = parser.parse_args() #reads input for linux
-
-
+##Retrieve data
 speciesDict = args.input #create a variable for dictionary so you don't have to call args.input
 
 
@@ -88,9 +75,9 @@ for item in terms: #loop through accession inputs
         print("currently downloading " + label + "...\n" ) #show progress
     
        
-        urllib.request.urlretrieve(link, homeDir + f'/results/downloads/{label}.fna.gz') #command to download file linux       
+        urllib.request.urlretrieve(link, newpath + f'{label}.fna.gz') #command to download file linux       
         
-        files[item] = newpath + '/' + label + '.fna.gz' #add file name to file dict
+        files[item] = newpath + label + '.fna.gz' #add file name to file dict
     
         handle.close()
 
