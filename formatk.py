@@ -6,7 +6,6 @@ import urllib
 import os.path
 import json
 import argparse
-from datetime import datetime
 
 parser = argparse.ArgumentParser(description="Enter in genus species and its corresponding accession number in python dictonary notation with -i (Be sure to include quotes!) and your email for entrez with -e. \n Ex. {\"Escherichia coli\": \"GCA_002861225.1\",\"Lactobacillus crispatus\": \"GCA_002861815.1\"}") 
 #above line: create parser object and set description for user to learn input format
@@ -104,11 +103,9 @@ gbk_results = path + 'GBK'
 os.system('mkdir ' + gbk_results) #make directory for Prokka .gbk files
 
 for entry in fasta.keys(): #loop over each accession
-    now = datetime.now() #get current date and time
-    current = now.strftime("%H%M%S") #get current time as string
     genus = split_name[entry][0] #retrieve genus name
     species = split_name[entry][1] #retrieve species name
-    suffix = genus + '_' + species + '_' + current #genus_species_HHMMS
+    suffix = genus + '_' + species + '_' + entry #genus_species_HHMMS
     prokka_prefix = 'prokka_' + suffix #prefix for prokka files    
     os.system('prokka --outdir ' + prokka_results + suffix + ' --prefix prokka_' + suffix + ' --genus ' + genus + ' --species ' + species + ' ' + fasta[entry]) #Prokka command
     os.system('mv ' + prokka_results + suffix + '/' + prokka_prefix + '.gbk ' + gbk_results) #move .gbk to folder for batch script
