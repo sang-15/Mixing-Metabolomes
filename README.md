@@ -57,7 +57,7 @@ python3 formatk.py \
 -i '{"GCA_002861225.1": "Escherichia coli", "DIR/Lactobacillus_crispatus.FASTA": "Lactobacillus crispatus"}' 
 ```
 ### With optional flags -o and -e
-The following code will run the wrapper by giving GenBank assembly accession ([GCA_002861225.1](https://www.ncbi.nlm.nih.gov/assembly/GCA_002861225.1)) and give the results in a folder named **'formatk-result-TESTRUN'** under '$HOME/' directory with your own email
+The following code will run the wrapper by giving GenBank assembly accession ([GCA_002861225.1](https://www.ncbi.nlm.nih.gov/assembly/GCA_002861225.1)) and give the results in a folder named **'TESTRUN'** under '$HOME/' directory with your own email
 ```
 python3 formatk.py -i '{"GCA_002861225.1": "Escherichia coli"}' -e useremail -o TESTRUN 
 ```
