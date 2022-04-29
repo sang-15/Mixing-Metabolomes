@@ -46,7 +46,7 @@ python3 formatk.py -i '{"DIR/Escherichia_coli.FASTA": "Escherichia coli"}'
 - Runing multiple samples: Escherichia_coli.FASTA and Lactobacillus_crispatus.FASTA
 ```
 python3 formatk.py \
--i '{"Escherichia coli": "DIR/Escherichia_coli.FASTA", "DIR/Lactobacillus_crispatus.FASTA": "Lactobacillus crispatus"}' 
+-i '{"DIR/Escherichia_coli.FASTA": "Escherichia coli", "DIR/Lactobacillus_crispatus.FASTA": "Lactobacillus crispatus"}' 
 ```
 
 ### Mixing both GenBank assembly accession and user specified FASTA
