@@ -8,10 +8,12 @@ import json
 import argparse
 
 ##Setup
-#Set flags for wrapper inputs and implement each flag to the wrapper 
+#Set flags for wrapper input and implement each flag to the wrapper 
 parser = argparse.ArgumentParser(description='Thank you for using formatk! Please refer to READ.ME or our GitHub page for more detailed user information: https://github.com/sang-15/Mixing-Metabolomes.') 
 #above line: create parser object and set description for user
-parser.add_argument('-i','--input', type=json.loads, help='Enter in accession number or data location in python dictonary notation. (Be sure to include quotes outside the brackets as well!) \n Ex. {: \"GCA_002861225.1\":\"Escherichia coli\", \"GCA_002861815.1\": \"Lactobacillus crispatus\"}') #-i or --input set to take a json.load as argument 
+parser.add_argument('-i','--input', type=json.loads, 
+                    help='Enter in accession number or data location in python dictonary notation. (Be sure to include quotes outside the brackets as well!) \n Ex. {: \"GCA_002861225.1\":\"Escherichia coli\", \"GCA_002861815.1\": \"Lactobacillus crispatus\"}') 
+#-i or --input set to take a json.load as argument 
 parser.add_argument('-e', '--email', default = 'ylin22@luc.edu', help='Enter your email so entrez knows who you are')
 parser.add_argument('-o', '--output', default = 'formatkresults', help ='Name for output folder')
 
