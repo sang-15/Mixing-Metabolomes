@@ -9,11 +9,11 @@ import argparse
 
 ##Setup
 #Set flags for wrapper inputs and implement each flag to the wrapper 
-parser = argparse.ArgumentParser(description="Enter in genus species and its corresponding accession number in python dictonary notation with -i (Be sure to include quotes!) and your email for entrez with -e. \n Ex. {\"Escherichia coli\": \"GCA_002861225.1\",\"Lactobacillus crispatus\": \"GCA_002861815.1\"}") 
-#above line: create parser object and set description for user to learn input format
-parser.add_argument('-i','--input', type=json.loads) #-i or --input set to take a json.load as argument 
-parser.add_argument('-e', '--email', default = 'ylin22@luc.edu', help='enter your email so entrez knows who you are')
-parser.add_argument('-o', '--output', default = 'formatkresults', help ='Name for output directory')
+parser = argparse.ArgumentParser(description='Thank you for using formatk! Please refer to READ.ME or our GitHub page for more detailed user information: https://github.com/sang-15/Mixing-Metabolomes.') 
+#above line: create parser object and set description for user
+parser.add_argument('-i','--input', type=json.loads, help='Enter in accession number or data location in python dictonary notation. (Be sure to include quotes outside the brackets as well!) \n Ex. {: \"GCA_002861225.1\":\"Escherichia coli\", \"GCA_002861815.1\": \"Lactobacillus crispatus\"}') #-i or --input set to take a json.load as argument 
+parser.add_argument('-e', '--email', default = 'ylin22@luc.edu', help='Enter your email so entrez knows who you are')
+parser.add_argument('-o', '--output', default = 'formatkresults', help ='Name for output folder')
 
 args = parser.parse_args() #reads input for linux
 outputdir = args.output
