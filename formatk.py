@@ -7,6 +7,8 @@ import os.path
 import json
 import argparse
 
+##Setup
+#Set flags for wrapper inputs and implement each flag to the wrapper 
 parser = argparse.ArgumentParser(description="Enter in genus species and its corresponding accession number in python dictonary notation with -i (Be sure to include quotes!) and your email for entrez with -e. \n Ex. {\"Escherichia coli\": \"GCA_002861225.1\",\"Lactobacillus crispatus\": \"GCA_002861815.1\"}") 
 #above line: create parser object and set description for user to learn input format
 parser.add_argument('-i','--input', type=json.loads) #-i or --input set to take a json.load as argument 
@@ -14,9 +16,8 @@ parser.add_argument('-e', '--email', default = 'ylin22@luc.edu', help='enter you
 parser.add_argument('-o', '--output', default = 'formatkresults', help ='Name for output directory')
 
 args = parser.parse_args() #reads input for linux
-
 outputdir = args.output
-#Setup
+
 #Create the output folder
 os.system('mkdir ' + outputdir)
 
@@ -24,24 +25,15 @@ os.system('mkdir ' + outputdir)
 path = os.path.expanduser('~')
 path = path + '/' + outputdir + '/'
 
-#### path for linux: $HOME/results/ ####
-#### path for python: path ####
-#### new files in path for python: path + 'xxx.txt' ####
-
-
 newpath = path + 'downloads/' #path to download files
 if not os.path.exists(newpath):
     os.system('mkdir ' + newpath) #create path to download files
 
+    
 ##Retrieve data
 speciesDict = args.input #create a variable for dictionary so you don't have to call args.input
-
-
 terms = list(speciesDict.keys()) #user input in list form
-
-
 Entrez.email=args.email #email to use entrez
-
 files = dict() #empty dict of file names
 
 for item in terms: #loop through accession inputs
@@ -80,7 +72,6 @@ for item in terms: #loop through accession inputs
         handle.close()
 
       
-
 #Prokka
 #Use Prokka to annotate inputted genome
 #full_species_name = list(speciesDict.values()) #user input for genus/species name in list
