@@ -63,6 +63,8 @@ python3 formatk.py -i '{"GCA_002861225.1": "Escherichia coli"}' -e useremail -o 
 ```
 
 ## Output
+We rename each sample by the end of the process based on sample taxonomy information and it's input file name or GenBank assembly accession as 'genus_species_filename' or 'genus_species_GenBank_ID'. <br />
+
 The wrapper will generate a 'formatkresults' folder under '$HOME/' directory (or user specified folder if '-o' argument is supplied), and the folder contains the following: <br />
 
 - **formatk_out.txt** <br />
