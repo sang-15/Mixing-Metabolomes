@@ -1,1 +1,1 @@
-python3 formatk.py -i '{"GCA_002861225.1": "Escherichia coli"}' 
+python3 formatk.py -i '{"GCA_002861225.1": "Escherichia coli", "GCA_002861815.1": "Lactobacillus crispatus", "GCA_012030515.1":"Proteus mirabilis"}'
