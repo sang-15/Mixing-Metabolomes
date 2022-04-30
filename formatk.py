@@ -164,7 +164,7 @@ for i in glob.glob(path+"2kegg/*.gbk.ko.out"):
     outfile.write('# ' + org + '\n') 
     
     #Provide final order information corrsponding to the initial input
-    of.write(org + 'is used as input number ' + str(count) + ' to KEGG.' + '\n')
+    of.write(org + ' is used as input number ' + str(count) + ' to KEGG.' + '\n')
     count += 1
 
     #Loop through each line, identify the line with K ids and write the line to output file named 'formatk_out.txt'
