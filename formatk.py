@@ -22,7 +22,7 @@ outputdir = args.output
 
 #Set path and output folder
 path = os.path.expanduser('~')
-os.system('mkdir ' + outputdir)
+#os.system('mkdir ' + outputdir)
 path = path + '/' + outputdir + '/'
 
     
@@ -74,7 +74,8 @@ for item in terms: #loop through accession inputs
     
         handle.close()
 
-      
+os.system('mv esummary_assembly.dtd ' + path) #
+
 #Prokka
 #Use Prokka to annotate inputted genome
 #full_species_name = list(speciesDict.values()) #user input for genus/species name in list
