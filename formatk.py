@@ -90,7 +90,7 @@ for accession in files.keys(): #loop through file paths
         fasta[accession] = files[accession] #if not zipped, append file path without further action
     
 prokka_results = path + 'Prokka/' #path for Prokka results
-gbk_results = path + 'GBK'
+gbk_results = path + 'GBK/'
 os.system('mkdir ' + gbk_results) #make directory for Prokka .gbk files
 
 for entry in fasta.keys(): #loop over each accession
