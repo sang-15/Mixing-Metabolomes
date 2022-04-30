@@ -1,0 +1,3 @@
+Escherichia_coli_GCF_002861225 is used as input number 1 to KEGG.
+Proteus_mirabilis_GCF_012030515 is used as input number 2 to KEGG.
+Lactobacillus_crispatus_GCF_002861815 is used as input number 3 to KEGG.
