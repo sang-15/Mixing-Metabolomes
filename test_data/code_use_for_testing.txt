@@ -1,0 +1,1 @@
+python3 formatk.py -i '{"GCA_002861225.1": "Escherichia coli"}' 
