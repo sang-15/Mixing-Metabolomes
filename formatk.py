@@ -20,11 +20,9 @@ parser.add_argument('-o', '--output', default = 'formatkresults', help ='Name fo
 args = parser.parse_args() #reads input for linux
 outputdir = args.output
 
-#Create the output folder
-os.system('mkdir ' + outputdir)
-
-#Set path
+#Set path and output folder
 path = os.path.expanduser('~')
+os.system('mkdir ' + outputdir)
 path = path + '/' + outputdir + '/'
 
 newpath = path + 'downloads/' #path to download files
