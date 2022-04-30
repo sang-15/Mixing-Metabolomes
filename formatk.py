@@ -25,10 +25,6 @@ path = os.path.expanduser('~')
 os.system('mkdir ' + outputdir)
 path = path + '/' + outputdir + '/'
 
-newpath = path + 'downloads/' #path to download files
-if not os.path.exists(newpath):
-    os.system('mkdir ' + newpath) #create path to download files
-
     
 ##Retrieve data
 speciesDict = args.input #create a variable for dictionary so you don't have to call args.input
@@ -36,6 +32,13 @@ terms = list(speciesDict.keys()) #user input in list form
 Entrez.email=args.email #email to use entrez
 files = dict() #empty dict of file names
 
+for item in terms: #loop through accession inputs
+
+    if '.fasta' not in item or '.fna' not in item: # if term is user supplied file
+      newpath = path + '/downloads/' #path to download files
+      os.system('mkdir ' + newpath) #create path to download files
+
+      
 for item in terms: #loop through accession inputs
 
     if '.fasta' in item or '.fna' in item: # if term is user supplied file
@@ -94,12 +97,13 @@ gbk_results = path + 'GBK/'
 os.system('mkdir ' + gbk_results) #make directory for Prokka .gbk files
 
 for entry in fasta.keys(): #loop over each accession
-    genus = split_name[entry][0] #retrieve genus name
-    species = split_name[entry][1] #retrieve species name
-    suffix = genus + '_' + species + '_' + entry #genus_species_HHMMS
-    prokka_prefix = 'prokka_' + suffix #prefix for prokka files    
-    os.system('prokka --outdir ' + prokka_results + suffix + ' --prefix prokka_' + suffix + ' --genus ' + genus + ' --species ' + species + ' ' + fasta[entry]) #Prokka command
-    os.system('mv ' + prokka_results + suffix + '/' + prokka_prefix + '.gbk ' + gbk_results) #move .gbk to folder for batch script
+    for i in 1:len(fasta.keys())+1: #Provide ID for each entry
+      genus = split_name[entry][0] #retrieve genus name
+      species = split_name[entry][1] #retrieve species name
+      suffix = genus + '_' + species + '_' + i #genus_species_ID
+      prokka_prefix = 'prokka_' + suffix #prefix for prokka files    
+      os.system('prokka --outdir ' + prokka_results + suffix + ' --prefix prokka_' + suffix + ' --genus ' + genus + ' --species ' + species + ' ' + fasta[entry]) #Prokka command
+      os.system('mv ' + prokka_results + suffix + '/' + prokka_prefix + '.gbk ' + gbk_results) #move .gbk to folder for batch script
 
 
 #SilentGene
