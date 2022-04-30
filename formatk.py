@@ -1,4 +1,3 @@
-
 import glob
 from Bio import Entrez 
 import os
@@ -7,13 +6,16 @@ import os.path
 import json
 import argparse
 
+
+
 ##Setup
+
 #Set flags for wrapper input and implement each flag to the wrapper 
 parser = argparse.ArgumentParser(description='Thank you for using formatk! Please refer to READ.ME or our GitHub page for more detailed user information: https://github.com/sang-15/Mixing-Metabolomes.') 
 #above line: create parser object and set description for user
 parser.add_argument('-i','--input', type=json.loads, 
                     help='Enter in accession number or data location in python dictonary notation. (Be sure to include quotes outside the brackets as well!) \n Ex. {: \"GCA_002861225.1\":\"Escherichia coli\", \"GCA_002861815.1\": \"Lactobacillus crispatus\"}') 
-#-i or --input set to take a json.load as argument 
+#-i or --input set to take a json.load as argue4xiyment 
 parser.add_argument('-e', '--email', default = 'ylin22@luc.edu', help='Enter your email so entrez knows who you are')
 parser.add_argument('-o', '--output', default = 'formatkresults', help ='Name for output folder')
 
@@ -22,11 +24,13 @@ outputdir = args.output
 
 #Set path and output folder
 path = os.path.expanduser('~')
-#os.system('mkdir ' + outputdir)
 path = path + '/' + outputdir + '/'
+os.system('mkdir ' + path)
 
-    
+
+
 ##Retrieve data
+
 speciesDict = args.input #create a variable for dictionary so you don't have to call args.input
 terms = list(speciesDict.keys()) #user input in list form
 Entrez.email=args.email #email to use entrez
@@ -34,10 +38,12 @@ files = dict() #empty dict of file names
 
 for item in terms: #loop through accession inputs
 
-    if '.fasta' not in item or '.fna' not in item: # if term is user supplied file
-      newpath = path + '/downloads/' #path to download files
-      os.system('mkdir ' + newpath) #create path to download files
-
+    if '.fasta' in item or '.fna' in item: 
+        continue
+    else: # if user is not user supplied file
+        newpath = path + 'downloads/' #path to download files
+        os.system('mkdir ' + newpath) #create path to download files
+        break
       
 for item in terms: #loop through accession inputs
 
@@ -74,11 +80,13 @@ for item in terms: #loop through accession inputs
     
         handle.close()
 
-os.system('mv esummary_assembly.dtd ' + path) #
+if os.path.exists('esummary_assembly.dtd'):
+    os.system('mv esummary_assembly.dtd ' + path) #Move the files to output file
 
+      
+      
 #Prokka
 #Use Prokka to annotate inputted genome
-#full_species_name = list(speciesDict.values()) #user input for genus/species name in list
 
 split_name = dict() #dictionary for split names
 for i in speciesDict.keys(): #loop through list of names
@@ -97,17 +105,20 @@ prokka_results = path + 'Prokka/' #path for Prokka results
 gbk_results = path + 'GBK/'
 os.system('mkdir ' + gbk_results) #make directory for Prokka .gbk files
 
-for entry in fasta.keys(): #loop over each accession
-    for i in 1:len(fasta.keys())+1: #Provide ID for each entry
-      genus = split_name[entry][0] #retrieve genus name
-      species = split_name[entry][1] #retrieve species name
-      suffix = genus + '_' + species + '_' + i #genus_species_ID
-      prokka_prefix = 'prokka_' + suffix #prefix for prokka files    
-      os.system('prokka --outdir ' + prokka_results + suffix + ' --prefix prokka_' + suffix + ' --genus ' + genus + ' --species ' + species + ' ' + fasta[entry]) #Prokka command
-      os.system('mv ' + prokka_results + suffix + '/' + prokka_prefix + '.gbk ' + gbk_results) #move .gbk to folder for batch script
+
+for entry, name in fasta.items(): #loop over each file
+    newname = name.split('/')[-1]
+    newname = newname.split('.')[0] # Add file name
+    genus = split_name[entry][0] #retrieve genus name
+    species = split_name[entry][1] #retrieve species name
+    suffix = genus + '_' + species + '_' + newname #genus_species_ID
+    prokka_prefix = 'prokka_' + suffix #prefix for prokka files    
+    os.system('prokka --usegenus --outdir ' + prokka_results + suffix + ' --prefix prokka_' + suffix + ' --genus ' + genus + ' --species ' + species + ' ' + fasta[entry]) #Prokka command
+    os.system('mv ' + prokka_results + suffix + '/' + prokka_prefix + '.gbk ' + gbk_results) #move .gbk to folder for batch script
 
 
-#SilentGene
+
+##SilentGene
 #retrieve and use prokka2kegg_batch to convert to K IDs
 
 if not os.path.exists(path + 'prokka2kegg_batch.py'): #check if script and db already exist
@@ -116,15 +127,27 @@ if not os.path.exists(path + 'prokka2kegg_batch.py'): #check if script and db al
 
 os.system('python3 ' + path + 'prokka2kegg_batch.py -i ' + gbk_results + ' -o ' + path + '2kegg/ -d ' + path + 'idmapping_KO.tab.gz?raw=true') #convert to K id's
 
+
+
 #Aggrgation
 
-#Query data for KEGG MAPPER
+#Query data for KEGG MAPPER and generate outputs
+
+#The name of each sample will be name as 'genus_species_filename'
+
+#formatk_out.txt: 
 #Two-column dataset with K numbers in the second column, optionally preceded by the user's identifiers in the first column.
 #This is consistent with the output files of automatic annotation servers, BlastKOALA, GhostKOALA, KofamKOALA and KAAS.
 #The dataset may contain lists of K numbers for multiple organisms, each list preceded by the comment line starting with #.
 
-# Open output file
+#formatk_out_order.txt:
+#The final order of the KEGG output which corresponding to the input order
+
+# Open output files
 outfile = open(path+'formatk_out.txt','w') 
+of = open(path+'formatk_out_order.txt','w')
+
+count = 1
 
 #Read each prokka outputs 
 for i in glob.glob(path+"2kegg/*.gbk.ko.out"):
@@ -139,10 +162,14 @@ for i in glob.glob(path+"2kegg/*.gbk.ko.out"):
     
     #write each organism name
     outfile.write('# ' + org + '\n') 
+    
+    #Provide final order information corrsponding to the initial input
+    of.write(org + 'is used as input number ' + str(count) + ' to KEGG.' + '\n')
+    count += 1
 
     #Loop through each line, identify the line with K ids and write the line to output file named 'formatk_out.txt'
     for line in sg_out:
         if '\t' in line:
             outfile.write(line + '\n')
-            
+                
 outfile.close()
