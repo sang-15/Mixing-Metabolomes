@@ -63,15 +63,20 @@ python3 formatk.py -i '{"GCA_002861225.1": "Escherichia coli"}' -e useremail -o 
 ```
 
 ## Output
-The wrapper will generate a 'results' folder under '$HOME/' directory, and the folder contains the following: <br />
+The wrapper will generate a 'formatkresults' folder under '$HOME/' directory (or user specified folder if '-o' argument is supplied), and the folder contains the following: <br />
 
-- Downloaded assemble genome data from NCBI (if applicable)
-- Prokka folder <br /> 
-Prokka generated outputs 
-- gbk_results folder <br /> 
-prokka2kegg generated outputs 
-- formatk_out.txt <br />
+- **formatk_out.txt** <br />
 Final gene list required by KEGG MAPPER
+- **formatk_out_order.txt** <br />
+The order of each sample in formatk_out.txt and KEGG 
+- Others
+  - Downloaded assemble genome data from NCBI (if applicable)
+  - Prokka folder <br /> 
+    Prokka generated results for each entry
+  - GBK folder <br /> 
+    Prokka generated gbk files output for each entry
+   - 2kegg <br />
+    SlientGene generated results for each entry
 
 
 ## Test data
