@@ -5,41 +5,84 @@ import urllib
 import os.path
 import json
 import argparse
-
-
+import urllib.request
+from urllib.error import HTTPError
 
 ##Setup
-
 #Set flags for wrapper input and implement each flag to the wrapper 
 parser = argparse.ArgumentParser(description='Thank you for using formatk! Please refer to READ.ME or our GitHub page for more detailed user information: https://github.com/sang-15/Mixing-Metabolomes.') 
 #above line: create parser object and set description for user
-parser.add_argument('-i','--input', type=json.loads, 
-                    help='Enter in accession number or data location in python dictonary notation. (Be sure to include quotes outside the brackets as well!) \n Ex. {: \"GCA_002861225.1\":\"Escherichia coli\", \"GCA_002861815.1\": \"Lactobacillus crispatus\"}') 
+parser.add_argument('-i','--input',
+                    help='Enter in accession number or local assembled genome file location in a python dictonary notation. \n Ex. {\"GCA_002861225.1\":\"Escherichia coli\", \"DIR.fasta\": \"Lactobacillus crispatus\"} (Be sure to include quotes outside the brackets as well!)') 
 #-i or --input set to take a json.load as argue4xiyment 
-parser.add_argument('-e', '--email', default = 'ylin22@luc.edu', help='Enter your email so entrez knows who you are')
+parser.add_argument('-e', '--email', default = 'ylin22@luc.edu', help='Enter your email so NCBI Entrez API knows who you are')
 parser.add_argument('-o', '--output', default = 'formatkresults', help ='Name for output folder')
 
-args = parser.parse_args() #reads input for linux
-outputdir = args.output
+#reads input for linux
+args = parser.parse_args() 
 
-#Set path and output folder
+#Check input format
+#End the program if the input format is wrong
+try:
+    a_json = json.loads(args.input)
+except:
+    print("ERROR: Something is wrong with the input format. Please try again! Use -h for help!")
+    print("ERROR: End program.")
+    os._exit(0)
+
+#Check input duplicates
+#End the program if there is duplicated local assembled genome file or NCBI accession number 
+n = []
+t = str(args.input).replace('{','').replace('}','').replace(' ','').replace('"','').split(',')
+for i in t:
+    n.append(i.split(':')[0])
+
+if len(n) != len(set(n)):
+    print("ERROR: Duplicated local assembled genome file or NCBI accession number found in input! Please remove them and try again!")
+    print("ERROR: End program.")
+    os._exit(0)
+
+#Check input sample number (maximum 10 allowed)
+#End the program if there are more than 10 samples
+if len(a_json) > 10:
+    print("ERROR: Too many samples! We can only take upto 10 samples. Please try again!")
+    print("ERROR: End program.")
+    os._exit(0)
+
+    
+#Set path
+outputdir = args.output
 path = os.path.expanduser('~')
 path = path + '/' + outputdir + '/'
+
+## Check the availability of the output folder
+#End the program if the outfolder already exsit and print out info
+if os.path.exists(path):
+    print("ERROR: Looks like you already have folder " + path +", plese use -o to rename your output folder and try again!")
+    print("ERROR: End program.")
+    os._exit(0)
+
+#Set output folder
 os.system('mkdir ' + path)
 
+#Set up email to use entrez
+Entrez.email=args.email 
 
 
 ##Retrieve data
-
-speciesDict = args.input #create a variable for dictionary so you don't have to call args.input
+speciesDict = json.loads(args.input) #create a variable for dictionary 
 terms = list(speciesDict.keys()) #user input in list form
-Entrez.email=args.email #email to use entrez
 files = dict() #empty dict of file names
 
 for item in terms: #loop through accession inputs
 
+    #For user specified input, check if the file exsit, if not print error and exit program
     if '.fasta' in item or '.fna' in item: 
-        continue
+        if not os.path.exists(os.path.expanduser(item)):
+            print('ERROR: We CANNOT locate your file ' + item + ', plese check your input and try again!')
+            print("ERROR: End program.")
+            os._exit(0)
+            
     else: # if user is not user supplied file
         newpath = path + 'downloads/' #path to download files
         os.system('mkdir ' + newpath) #create path to download files
@@ -56,6 +99,12 @@ for item in terms: #loop through accession inputs
         handle = Entrez.esearch(db="assembly", term=item, retype="text") #search assembly database for accession inputs
         record = Entrez.read(handle) #format handle
 
+        #Check if accession number input can be found in NCBI
+        #End program if the accession number is wrong
+        if 'ErrorList' in record:
+            print('ERROR: We CANNOT locate your accession number ' + item + ' in NCBI assembly database, plese check your input and try again!')
+            print("ERROR: End program")
+            os._exit(0)
 
         for id in record['IdList']: #use id(s) found in handle 
         
@@ -71,11 +120,10 @@ for item in terms: #loop through accession inputs
         label = os.path.basename(url) #format ftp url for downloading
         link = os.path.join(url,label+'_genomic.fna.gz') #navigating to folder on website
         link = link.replace(os.sep, '/') #format -> replace \ with /
-        print("currently downloading " + label + "...\n" ) #show progress
-    
+        
        
         urllib.request.urlretrieve(link, newpath + f'{label}.fna.gz') #command to download file linux       
-        
+        print("currently downloading " + label + "...\n" ) #show progress
         files[item] = newpath + label + '.fna.gz' #add file name to file dict
     
         handle.close()
@@ -83,7 +131,6 @@ for item in terms: #loop through accession inputs
 if os.path.exists('esummary_assembly.dtd'):
     os.system('mv esummary_assembly.dtd ' + path) #Move the files to output file
 
-      
       
 #Prokka
 #Use Prokka to annotate inputted genome
@@ -118,7 +165,8 @@ for entry, name in fasta.items(): #loop over each file
 
 
 
-##SilentGene
+
+#SilentGene
 #retrieve and use prokka2kegg_batch to convert to K IDs
 
 if not os.path.exists(path + 'prokka2kegg_batch.py'): #check if script and db already exist
@@ -127,13 +175,9 @@ if not os.path.exists(path + 'prokka2kegg_batch.py'): #check if script and db al
 
 os.system('python3 ' + path + 'prokka2kegg_batch.py -i ' + gbk_results + ' -o ' + path + '2kegg/ -d ' + path + 'idmapping_KO.tab.gz?raw=true') #convert to K id's
 
-
-
 #Aggrgation
 
-#Query data for KEGG MAPPER and generate outputs
-
-#The name of each sample will be name as 'genus_species_filename'
+#Query data for KEGG MAPPER
 
 #formatk_out.txt: 
 #Two-column dataset with K numbers in the second column, optionally preceded by the user's identifiers in the first column.
@@ -164,7 +208,7 @@ for i in glob.glob(path+"2kegg/*.gbk.ko.out"):
     outfile.write('# ' + org + '\n') 
     
     #Provide final order information corrsponding to the initial input
-    of.write(org + ' is used as input number ' + str(count) + ' to KEGG.' + '\n')
+    of.write(org + 'is used as input number ' + str(count) + ' to KEGG.' + '\n')
     count += 1
 
     #Loop through each line, identify the line with K ids and write the line to output file named 'formatk_out.txt'
