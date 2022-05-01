@@ -217,3 +217,4 @@ for i in glob.glob(path+"2kegg/*.gbk.ko.out"):
             outfile.write(line + '\n')
                 
 outfile.close()
+of.close()
